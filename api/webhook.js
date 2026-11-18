@@ -7,7 +7,7 @@ export default async function handler(req, res) {
         const { message, callback_query } = req.body;
 
         // ================= SOZLAMALAR (hammasi shu yerda) =================
-        const token = '9283172833:AAECXfGuqA2UVFrdE_mZGal8n5JnOzNNPIc';
+        const token = '9283172833:AAEQm2VN852Ny8HGlQW9w1Bu7-qI77L6ocI';
         const adminChatId = '8832791564';
         const cardNumber = '4916 9917 2603 8834';
         const cardHolder = 'Muhammadamin I.';
