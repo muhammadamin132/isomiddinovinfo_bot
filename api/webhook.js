@@ -5,7 +5,7 @@ export default async function handler(req, res) {
         const adminChatId = '8832791564';
         const apiUrl = `https://api.telegram.org/bot${token}/`;
 
-        // 1. START BUYRUG'I
+        // 1. START BUYRUG'I (Majburiy obuna)
         if (message && message.text === '/start') {
             const chatId = message.chat.id;
             await fetch(`${apiUrl}sendMessage`, {
@@ -13,21 +13,41 @@ export default async function handler(req, res) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    text: `Assalomu alaykum, ${message.from.first_name}!\n\nMuhammadamin Isomiddinovning rasmiy botiga xush kelibsiz! 🚀\n\nXizmatlarim:`,
+                    text: `Assalomu alaykum, ${message.from.first_name}!\n\nBotdan foydalanish uchun, iltimos, avval quyidagi sahifalarimizga obuna bo'ling:`,
                     reply_markup: {
                         inline_keyboard: [
                             [{ text: "📢 Telegram Kanal", url: "https://t.me/muhammadamin_isomiddinovx" }],
                             [{ text: "📸 Instagram", url: "https://www.instagram.com/muhammadamin__officiall/" }],
-                            [{ text: "💻 Web Sayt (Bepul maslahat)", callback_data: "order_web" }],
-                            [{ text: "🎬 AI Video (Bepul maslahat)", callback_data: "order_ai" }],
-                            [{ text: "💎 PREMIUM XIZMATLAR (VIP)", callback_data: "premium_info" }] // YANGI TUGMA
+                            [{ text: "✅ Obuna bo'ldim, davom etish", callback_data: "check_sub" }] // Asosiy menyuga o'tish
                         ]
                     }
                 })
             });
         }
 
-        // 2. PREMIUM TUGMASI BOSILGANDA
+        // 2. OBUNA BO'LDIM TUGMASI BOSILGANDA (Asosiy Menyu)
+        if (callback_query && callback_query.data === 'check_sub') {
+            const chatId = callback_query.message.chat.id;
+            await fetch(`${apiUrl}sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: `Rahmat! Asosiy menyuga xush kelibsiz. Kerakli bo'limni tanlang:`,
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{ text: "💻 Web Sayt (Bepul maslahat)", callback_data: "order_web" }],
+                            [{ text: "🎬 AI Video (Bepul maslahat)", callback_data: "order_ai" }],
+                            [{ text: "💎 PREMIUM XIZMATLAR (VIP)", callback_data: "premium_info" }],
+                            [{ text: "👤 Shaxsiy Telegram", url: "https://t.me/Muhammadaminofficial" }]
+                        ]
+                    }
+                })
+            });
+            await fetch(`${apiUrl}answerCallbackQuery?callback_query_id=${callback_query.id}`);
+        }
+
+        // 3. PREMIUM TUGMASI BOSILGANDA
         if (callback_query && callback_query.data === 'premium_info') {
             const chatId = callback_query.message.chat.id;
             await fetch(`${apiUrl}sendMessage`, {
@@ -46,7 +66,7 @@ export default async function handler(req, res) {
             await fetch(`${apiUrl}answerCallbackQuery?callback_query_id=${callback_query.id}`);
         }
 
-        // 3. WEB SAYT TANLANGANDA
+        // 4. WEB SAYT TANLANGANDA
         if (callback_query && callback_query.data === 'order_web') {
             const chatId = callback_query.message.chat.id;
             await fetch(`${apiUrl}sendMessage`, {
@@ -61,7 +81,7 @@ export default async function handler(req, res) {
             await fetch(`${apiUrl}answerCallbackQuery?callback_query_id=${callback_query.id}`);
         }
 
-        // 4. AI VIDEO TANLANGANDA
+        // 5. AI VIDEO TANLANGANDA
         if (callback_query && callback_query.data === 'order_ai') {
             const chatId = callback_query.message.chat.id;
             await fetch(`${apiUrl}sendMessage`, {
@@ -76,12 +96,13 @@ export default async function handler(req, res) {
             await fetch(`${apiUrl}answerCallbackQuery?callback_query_id=${callback_query.id}`);
         }
 
-        // 5. MIJOZ XABAR YOZGANDA (Oddiy bepul so'rov)
+        // 6. MIJOZ XABAR YOZGANDA (Buyurtma matni)
         if (message && message.text && message.text !== '/start') {
             const chatId = message.chat.id;
             const userName = message.from.first_name;
             const userText = message.text;
 
+            // Mijozga tasdiqlash xabari
             await fetch(`${apiUrl}sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -96,12 +117,13 @@ export default async function handler(req, res) {
                 })
             });
 
+            // Adminga (sizga) xabar yuborish
             await fetch(`${apiUrl}sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: adminChatId,
-                    text: `🔔 YANGI BEPUL SO'ROV!\n\n👤 Mijoz: ${userName}\n💬 Xabar: ${userText}`
+                    text: `🔔 YANGI BUYURTMA!\n\n👤 Mijoz: ${userName}\n💬 Xabar: ${userText}`
                 })
             });
         }
